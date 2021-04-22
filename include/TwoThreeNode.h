@@ -21,5 +21,25 @@ namespace itis {
     explicit TwoThreeNode (int k, TwoThreeNode *first_ = nullptr, TwoThreeNode *second_ = nullptr,
                                   TwoThreeNode *third_ = nullptr, TwoThreeNode *parent_ = nullptr,
                                                                   TwoThreeNode *fourth_ = nullptr);
+
+    bool find(int k);
+
+    void swap(int &x, int &y);
+
+    void sort2(int &x, int &y)
+
+    void sort3(int &x, int &y, int &z);
+
+    void sort();
+
+    void insert_to_node(int k); // vstavka
+
+    void remove_from_node(int k); // udalenie
+
+    void become_node2(int k, TwoThreeNode *first_, TwoThreeNode *second_);
+
+    bool is_leaf();
+
+
   };
 }

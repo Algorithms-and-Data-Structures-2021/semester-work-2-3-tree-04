@@ -2,6 +2,7 @@
 
 // Заголовочный файл с объявлением структуры данных
 
+#include "TwoThreeNode.h"
 namespace itis {
 
   // Tip 1: объявите здесь необходимые структуры, функции, константы и прочее
@@ -17,12 +18,36 @@ namespace itis {
 
     TwoThreeNode *Search(int k);
 
+    void *Remove(int k);
+
     TwoThreeNode *root();
 
-    TwoThreeNode *Remove(int k);
+    int Height();
 
-    // Tip 2: На начальном этапе разработки структуры данных можете определения методов задавать в
-    // заголовочном файле, как только работа будет завершена, можно будет оставить здесь только объявления.
+    void Traverse(const TraversalAlgorithm &algorithm) const; // Проход по ширине
+
+   private:
+    TwoThreeNode *root_{nullptr};
+
+    TwoThreeNode *merge(TwoThreeNode *leaf);
+
+    TwoThreeNode *redistribute(TwoThreeNode *leaf);
+
+    TwoThreeNode *fix(TwoThreeNode *leaf);
+
+    TwoThreeNode *split(TwoThreeNode *item);
+
+    void insert(int k, TwoThreeNode *node);
+
+    void clear(TwoThreeNode *node);
+
+    TwoThreeNode *search(int k, TwoThreeNode *node);
+
+    TwoThreeNode *remove(int k, TwoThreeNode *node);
+
+    int height(TwoThreeNode *node);
+
+    TwoThreeNode *findMin(TwoThreeNode *p);
 
 
   };
