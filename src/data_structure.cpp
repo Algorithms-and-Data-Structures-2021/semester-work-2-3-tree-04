@@ -4,6 +4,12 @@
 
 namespace itis {
 
-  // здесь должны быть определения методов вашей структуры
+  struct TwoThreeTree {
+    void Clear();
+
+    void Insert(int k);
+
+    TwoThreeNode *Search(int k);
+  };
 
 }  // namespace itis

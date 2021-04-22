@@ -10,18 +10,21 @@ namespace itis {
   inline constexpr auto kStringConstant = "Hello, stranger!";
 
   // Пример: объявление структуры с полями и методами
-  struct MyStructure {
-   public:
-    int size_{0};
-    int capacity_{0};
-    int* data_{nullptr};
+  struct TwoThreeTree {
+    void Clear();
+
+    void Insert(int k);
+
+    TwoThreeNode *Search(int k);
+
+    TwoThreeNode *root();
+
+    TwoThreeNode *Remove(int k);
 
     // Tip 2: На начальном этапе разработки структуры данных можете определения методов задавать в
     // заголовочном файле, как только работа будет завершена, можно будет оставить здесь только объявления.
 
-    int size() const {
-      return size_;
-    }
+
   };
 
 }  // namespace itis
