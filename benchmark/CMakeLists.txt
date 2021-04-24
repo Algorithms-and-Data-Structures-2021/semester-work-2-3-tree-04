@@ -3,7 +3,7 @@
 
 # Пример создания контрольного теста (исполняемого файла) под названием demo_benchmark.
 # Исходный код предоставлен в файле demo_benchmark.cpp текущей директории.
-add_executable(benchmark_insert benchmark_insert.cpp benchmark_insert.cpp benchmark_remove.cpp benchmark_search.cpp benchmark_search.h)
+add_executable(benchmark_insert benchmark_insert.cpp benchmark_insert.cpp benchmark_remove.cpp benchmark_search.cpp)
 add_executable(benchmark_search benchmark_search.cpp)
 add_executable(benchmark_remove benchmark_remove.cpp)
 

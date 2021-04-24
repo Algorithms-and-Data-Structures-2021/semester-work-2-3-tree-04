@@ -7,6 +7,8 @@
 
 #endif  //SEMESTER_WORK_TEMPLATE_TWOTHREENODE_H
 
+#pragma once
+
 namespace itis {
   struct TwoThreeNode {
     int size;
