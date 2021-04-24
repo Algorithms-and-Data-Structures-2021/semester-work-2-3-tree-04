@@ -26,7 +26,7 @@ namespace itis {
 
     void swap(int &x, int &y);
 
-    void sort2(int &x, int &y)
+    void sort2(int &x, int &y);
 
     void sort3(int &x, int &y, int &z);
 

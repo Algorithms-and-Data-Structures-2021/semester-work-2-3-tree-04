@@ -3,6 +3,7 @@
 // Заголовочный файл с объявлением структуры данных
 
 #include "TwoThreeNode.h"
+#include "traversalAlgorithm.h"
 namespace itis {
 
   // Tip 1: объявите здесь необходимые структуры, функции, константы и прочее
@@ -48,8 +49,6 @@ namespace itis {
     int height(TwoThreeNode *node);
 
     TwoThreeNode *findMin(TwoThreeNode *p);
-
-
   };
 
 }  // namespace itis
