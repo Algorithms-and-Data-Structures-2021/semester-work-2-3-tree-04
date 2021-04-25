@@ -9,7 +9,7 @@
 using namespace std;
 
 // абсолютный путь до набора данных
-static constexpr auto kDatasetPath = string_view{PROJECT_DATASET_DIR};
+static constexpr auto kDatasetPath = string_view{"/Users/timuribragimov/CLionProjects/semester-work-2-3-tree-04/dataset"};
 
 int main(int argc, char** argv) {
 
