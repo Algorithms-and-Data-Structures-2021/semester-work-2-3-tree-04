@@ -7,7 +7,6 @@
 #include <string>       // string, stoi
 #include <string_view>  // string_view
 #include <chrono>       // high_resolution_clock, duration_cast, nanoseconds
-#include <sstream>      // stringstream
 #include <vector>
 
 // подключаем вашу структуру данных
@@ -25,9 +24,6 @@ int main() {
   // Tip 1: входные аргументы позволяют более гибко контролировать параметры вашей программы
   const auto path = string(kDatasetPath);
   const auto output_path = string(kProjectPath) + "/benchmark/result/benchmark_remove_result.csv";
-  cout << "Path to the 'dataset/' folder: " << path << endl;
-
-  // Tip 2: для перевода строки в число можете использовать функцию stoi (string to integer)
 
   // работа с набором данных
   vector <string> folders = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10"};
@@ -39,6 +35,7 @@ int main() {
       for (int i = 1; i < 11; i++) { // Запускаем замерку времени 10 раз
         string line = "1";
         auto input_file = ifstream(path + "/" + "remove/" + folder + "/" + file + ".csv");
+        auto time_diff_remove = chrono::nanoseconds::zero();
         cout << (path + "/" + "remove/" + folder + "/" + file) << endl;
 
         if (input_file) {
@@ -54,7 +51,6 @@ int main() {
 
         line = "1";
         input_file = ifstream(path + "/" + "remove/" + folder + "/" + file + ".csv");
-        const auto time_point_before_remove = chrono::steady_clock::now();
 
         // здесь находится участок кода, время которого необходимо замерить
         if (input_file) {
@@ -63,12 +59,13 @@ int main() {
             if (line == "") {
               break;
             }
+            const auto time_point_before_remove = chrono::steady_clock::now();
             tree.Remove(stoi(line));
+            const auto time_point_after_remove = chrono::steady_clock::now();
+            time_diff_remove += time_point_after_remove - time_point_before_remove;
           }
         }
 
-        const auto time_point_after_remove = chrono::steady_clock::now();
-        const auto time_diff_remove = time_point_after_remove - time_point_before_remove;
         const auto time_elapsed_ns_remove = chrono::duration_cast<chrono::nanoseconds>(time_diff_remove).count();
         cout << time_elapsed_ns_remove << endl;
 
