@@ -91,9 +91,7 @@ cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && cmake --config RelWithDebInfo --bu
 
 #### Генерация тестовых данных
 
-_Опишите формат хранения (JSON, XML, CSV, YAML и т.д.) и процесс генерации тестовых данных._
-
-_Разрешается использовать собственный формат хранения данных._
+_Формат хранения данных, выбранный для этого проекта, - .csv_
 
 Генерация тестового набора данных в
 формате [comma-seperated values (CSV)](https://en.wikipedia.org/wiki/Comma-separated_values):
@@ -112,12 +110,7 @@ python generate_csv_bench_dataset.py --samples 1000 <output> [args ...]
 Тестовые данные представлены в CSV формате (см.
 [`dataset/data/dataset-example.csv`](dataset/data/dataset-example.csv)):
 
-```csv
-id, full_name
-0, "Ramil Safin"
-1, "Bulat Abbyasov"
-...
-```
+
 
 **Примечание**. Для удобства запуска контрольных тестов рекомендуется организовывать данные в директориях, например:
 
