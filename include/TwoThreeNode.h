@@ -2,11 +2,6 @@
 // Created by niazh on 22.04.2021.
 //
 
-#ifndef SEMESTER_WORK_TEMPLATE_TWOTHREENODE_H
-#define SEMESTER_WORK_TEMPLATE_TWOTHREENODE_H
-
-#endif  //SEMESTER_WORK_TEMPLATE_TWOTHREENODE_H
-
 #pragma once
 
 namespace itis {

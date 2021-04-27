@@ -141,7 +141,9 @@ https://drive.google.com/drive/folders/1phStD5GKK9Id37s5GIeoxTaMO-BtsnUo
 _Список использованных при реализации структуры данных источников._
 
 https://neerc.ifmo.ru/wiki
+
 http://saod.narod.ru/saod3/List013
+
 https://ru.wikipedia.org/wiki
 
 
