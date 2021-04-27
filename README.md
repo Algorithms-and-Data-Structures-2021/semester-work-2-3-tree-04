@@ -145,24 +145,7 @@ https://drive.google.com/drive/folders/1phStD5GKK9Id37s5GIeoxTaMO-BtsnUo
 
 ##### Примеры запуска
 
-```shell
-./benchmark <input> <output> --trials 50
-```
-
-- `<input>` - входной файл с набором данных в формате CSV;
-- `<output>` - выходной файл с результатами контрольного теста;
-- `--trials` - количество прогонов на наборе данных и т.д.
-
-Добавление 10000 случайных элементов в структуру данных (повторить операцию 50 раз и вычислить среднее время работы и
-потребляемую память):
-
-```
-./add_benchmark.exe ../dataset/data/add/10000.csv metrics.txt --trials 50
-``` 
-
-где `<input> = ../dataset/data/add/10000.csv` и `<output> = metrics.txt`.
-
-**Примечание**. Файл с метриками не обязателен, можете выводить данные в стандартный поток вывода (т.е. консоль).
+Для запуска просто нажмите run benchmark_insert.cpp or benchmark_remove.cpp or benchmark_search.cpp
 
 ## Источники
 
