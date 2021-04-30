@@ -6,83 +6,82 @@
 
 namespace itis {
 
-  TwoThreeNode::TwoThreeNode(int k, TwoThreeNode *first_, TwoThreeNode *second_, TwoThreeNode *third_, TwoThreeNode *fourth_, TwoThreeNode *parent_):
-      size(1), key{k, 0}, first(first_), second(second_),
-      third(third_), fourth(fourth_), parent(parent_) {}
+  TwoThreeNode::TwoThreeNode(int key, TwoThreeNode *first_, TwoThreeNode *second_, TwoThreeNode *third_, TwoThreeNode *fourth_, TwoThreeNode *additionalElement_):
+      size(1), keys{key, 0}, left(first_), middle(second_), right(third_), additionalElement(fourth_), parent(additionalElement_) {}
 
-  bool TwoThreeNode::find(int k) {
+  bool TwoThreeNode::isContains(int key) {
     for (int i = 0; i < size; ++i) {
-      if (key[i] == k) {
+      if (keys[i] == key) {
         return true;
       }
     }
     return false;
   }
 
-  void TwoThreeNode::swap(int &x, int &y) {
-    int r = x;
-    x = y;
-    y = r;
+  void TwoThreeNode::swapKeys(int &a, int &b) {
+    int r = a;
+    a = b;
+    b = r;
   }
 
-  void TwoThreeNode::sort2(int &x, int &y) {
-    if(x > y) {
-      swap(x, y);
-    }
-  }
-
-  void TwoThreeNode::sort3(int &x, int &y, int &z) {
-    if(x > y) {
-      swap(x, y);
-    }
-    if(x > z) {
-      swap(x, z);
-    }
-    if(y > z) {
-      swap(y, z);
+  void TwoThreeNode::sortTwoElements(int &a, int &b) {
+    if(a > b) {
+      swapKeys(a, b);
     }
   }
 
-  void TwoThreeNode::sort() {
+  void TwoThreeNode::sortThreeElements(int &a, int &b, int &c) {
+    if(a > b) {
+      swapKeys(a, b);
+    }
+    if(a > c) {
+      swapKeys(a, c);
+    }
+    if(b > c) {
+      swapKeys(b, c);
+    }
+  }
+
+  void TwoThreeNode::sortKeys() {
     if(size == 1) {
       return;
     }
     if(size == 2) {
-      sort2(key[0], key[1]);
+      sortTwoElements(keys[0], keys[1]);
     }
     if(size == 3) {
-      sort3(key[0], key[1], key[2]);
+      sortThreeElements(keys[0], keys[1], keys[2]);
     }
   }
 
-  void TwoThreeNode::insert_to_node(int k) {
-    key[size] = k;
+  void TwoThreeNode::insertKey(int newKey) {
+    keys[size] = newKey;
     size++;
-    sort();
+    sortKeys();
   }
 
-  void TwoThreeNode::remove_from_node(int k) {
-    if (size >= 1 && key[0] == k) {
-      key[0] = key[1];
-      key[1] = 0;
+  void TwoThreeNode::removeByKey(int key) {
+    if (size >= 1 && keys[0] == key) {
+      keys[0] = keys[1];
+      keys[1] = 0;
       size--;
-    } else if (size == 2 && key[1] == k) {
-      key[1] = 0;
+    } else if (size == 2 && keys[1] == key) {
+      keys[1] = 0;
       size--;
     }
   }
 
-  void TwoThreeNode::become_node2(int k, TwoThreeNode *first_, TwoThreeNode *second_) {
-    key[0] = k;
-    key[1] = 0;
-    first = first_;
-    second = second_;
-    third = nullptr;
+  void TwoThreeNode::becomeTwoKeyNode(int key, TwoThreeNode *first_, TwoThreeNode *second_) {
+    keys[0] = key;
+    keys[1] = 0;
+    left = first_;
+    middle = second_;
+    right = nullptr;
     parent = nullptr;
     size = 1;
   }
 
-  bool TwoThreeNode::is_leaf() {
-    return (first == nullptr) && (second == nullptr) && (third == nullptr);
+  bool TwoThreeNode::isLeaf() {
+    return (left == nullptr) && (middle == nullptr) && (right == nullptr);
   }
 };

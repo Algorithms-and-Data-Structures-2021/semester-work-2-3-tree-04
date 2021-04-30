@@ -34,9 +34,9 @@ int main() {
     for (string folder : folders) { // Проходим по всем 10 папкам с файлами
       for (int i = 1; i < 11; i++) { // Запускаем замерку времени 10 раз
         string line = "1";
-        auto input_file = ifstream(path + "/" + "search/" + folder + "/" + file + ".csv");
+        auto input_file = ifstream(path + "/" + "downstreamSearch/" + folder + "/" + file + ".csv");
         auto time_diff_search = chrono::nanoseconds::zero();
-        cout << (path + "/" + "search/" + folder + "/" + file) << endl;
+        cout << (path + "/" + "downstreamSearch/" + folder + "/" + file) << endl;
 
         if (input_file) {
           while (line != "") {
@@ -50,7 +50,7 @@ int main() {
         input_file.close();
 
         line = "1";
-        input_file = ifstream(path + "/" + "search/" + folder + "/" + file + ".csv");
+        input_file = ifstream(path + "/" + "downstreamSearch/" + folder + "/" + file + ".csv");
 
         // здесь находится участок кода, время которого необходимо замерить
         if (input_file) {

@@ -1,54 +1,48 @@
 #pragma once
 
-// Заголовочный файл с объявлением структуры данных
-
 #include "TwoThreeNode.h"
 #include "traversalAlgorithm.h"
+
 namespace itis {
-
-  // Tip 1: объявите здесь необходимые структуры, функции, константы и прочее
-
-  // Пример: объявление константы времени компиляции в заголовочном файле
-  inline constexpr auto kStringConstant = "Hello, stranger!";
-
-  // Пример: объявление структуры с полями и методами
+  
   struct TwoThreeTree {
+
     void Clear();
 
-    void Insert(int k);
+    void Insert(int key);
 
-    TwoThreeNode *Search(int k);
+    TwoThreeNode *Search(int key);
 
-    void *Remove(int k);
+    void *Remove(int key);
 
-    TwoThreeNode *root();
+    TwoThreeNode *getRoot();
 
-    int Height();
+    int getHeight();
 
-    void Traverse(const TraversalAlgorithm &algorithm) const; // Проход по ширине
+    void Traverse(const TraversalAlgorithm &algorithm) const;
 
    private:
     TwoThreeNode *root_{nullptr};
 
-    TwoThreeNode *merge(TwoThreeNode *leaf);
+    TwoThreeNode *mergeNode(TwoThreeNode *leaf);
 
-    TwoThreeNode *redistribute(TwoThreeNode *leaf);
+    TwoThreeNode *rotate(TwoThreeNode *leaf);
 
-    TwoThreeNode *fix(TwoThreeNode *leaf);
+    TwoThreeNode *putRight(TwoThreeNode *leaf);
 
-    TwoThreeNode *split(TwoThreeNode *item);
+    TwoThreeNode *splitTwoTreeNode(TwoThreeNode *twoTreeNode);
 
-    void insert(int k, TwoThreeNode *node);
+    void insertIfRootExists(int key, TwoThreeNode *twoTreeNode);
 
-    void clear(TwoThreeNode *node);
+    void downstreamClear(TwoThreeNode *twoTreeNode);
 
-    TwoThreeNode *search(int k, TwoThreeNode *node);
+    TwoThreeNode *downstreamSearch(int key, TwoThreeNode *twoTreeNode);
 
-    TwoThreeNode *remove(int k, TwoThreeNode *node);
+    TwoThreeNode *downstreamRemove(int key, TwoThreeNode *twoTreeNode);
 
-    int height(TwoThreeNode *node);
+    int calculateHeight(TwoThreeNode *twoTreeNode);
 
-    TwoThreeNode *findMin(TwoThreeNode *p);
+    TwoThreeNode *downstreamSearchForMin(TwoThreeNode *twoTreeNode);
   };
 
-}  // namespace itis
+}

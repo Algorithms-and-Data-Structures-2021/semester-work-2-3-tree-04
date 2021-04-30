@@ -2,46 +2,41 @@
 // Created by niazh on 22.04.2021.
 //
 
-#ifndef SEMESTER_WORK_TEMPLATE_TWOTHREENODE_H
-#define SEMESTER_WORK_TEMPLATE_TWOTHREENODE_H
-
-#endif  //SEMESTER_WORK_TEMPLATE_TWOTHREENODE_H
-
 #pragma once
 
 namespace itis {
-  struct TwoThreeNode {
-    int size;
-    int key[3];
 
-    TwoThreeNode *first{nullptr};
-    TwoThreeNode *second{nullptr};
-    TwoThreeNode *third{nullptr};
-    TwoThreeNode *fourth{nullptr};
+  struct TwoThreeNode {
+
+    int size;
+    int keys[3];
+
+    TwoThreeNode *left{nullptr};
+    TwoThreeNode *middle{nullptr};
+    TwoThreeNode *right{nullptr};
+    TwoThreeNode *additionalElement{nullptr};
     TwoThreeNode *parent{nullptr};
 
-    explicit TwoThreeNode (int k, TwoThreeNode *first_ = nullptr, TwoThreeNode *second_ = nullptr,
-                                  TwoThreeNode *third_ = nullptr, TwoThreeNode *parent_ = nullptr,
-                                                                  TwoThreeNode *fourth_ = nullptr);
+    explicit TwoThreeNode (int key, TwoThreeNode *left_ = nullptr, TwoThreeNode *middle_ = nullptr,
+                                  TwoThreeNode *right_ = nullptr, TwoThreeNode *parent_ = nullptr,
+                                                                  TwoThreeNode *additionalElement_ = nullptr);
 
-    bool find(int k);
+    bool isContains(int key);
 
-    void swap(int &x, int &y);
+    void swapKeys(int &a, int &b);
 
-    void sort2(int &x, int &y);
+    void sortTwoElements(int &a, int &b);
 
-    void sort3(int &x, int &y, int &z);
+    void sortThreeElements(int &a, int &b, int &c);
 
-    void sort();
+    void sortKeys();
 
-    void insert_to_node(int k); // vstavka
+    void insertKey(int newKey);
 
-    void remove_from_node(int k); // udalenie
+    void removeByKey(int key);
 
-    void become_node2(int k, TwoThreeNode *first_, TwoThreeNode *second_);
+    void becomeTwoKeyNode(int key, TwoThreeNode *left_, TwoThreeNode *right_);
 
-    bool is_leaf();
-
-
+    bool isLeaf();
   };
 }

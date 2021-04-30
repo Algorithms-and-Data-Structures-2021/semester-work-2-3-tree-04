@@ -34,9 +34,9 @@ int main() {
     for (string folder : folders) { // Проходим по всем 10 папкам с файлами
       for (int i = 1; i < 11; i++) { // Запускаем замерку времени 10 раз
         string line = "1";
-        auto input_file = ifstream(path + "/" + "insert/" + folder + "/" + file + ".csv");
+        auto input_file = ifstream(path + "/" + "insertIfRootExists/" + folder + "/" + file + ".csv");
         auto time_diff_insert = chrono::nanoseconds::zero();
-        cout << (path + "/" + "insert/" + folder + "/" + file) << endl;
+        cout << (path + "/" + "insertIfRootExists/" + folder + "/" + file) << endl;
 
         // здесь находится участок кода, время которого необходимо замерить
         if (input_file) {

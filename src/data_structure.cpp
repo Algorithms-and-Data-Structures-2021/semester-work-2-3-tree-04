@@ -6,350 +6,354 @@ using namespace std;
 
 namespace itis {
 
-
-
   void TwoThreeTree::Clear() {
-    clear(root_);
+    downstreamClear(root_);
     root_ = nullptr;
   }
 
-  void TwoThreeTree::clear(TwoThreeNode *node) {
-    if (node != nullptr) {
-      clear(node->first);
-      clear(node->second);
-      clear(node->third);
-      delete [] node;
+  void TwoThreeTree::downstreamClear(TwoThreeNode *twoTreeNode) {
+    if (twoTreeNode != nullptr) {
+      downstreamClear(twoTreeNode->left);
+      downstreamClear(twoTreeNode->middle);
+      downstreamClear(twoTreeNode->right);
+      delete [] twoTreeNode;
     }
   }
 
-  void TwoThreeTree::Insert(int k){
+  void TwoThreeTree::Insert(int key){
     if (root_ != nullptr){
-      insert(k, root_);
+      insertIfRootExists(key, root_);
     } else {
-      root_ = new TwoThreeNode(k);
+      root_ = new TwoThreeNode(key);
     }
   }
 
-  void TwoThreeTree::insert(int k, TwoThreeNode *node) {
+  void TwoThreeTree::insertIfRootExists(int key, TwoThreeNode *twoTreeNode) {
 
-    if (node->is_leaf()) {
-      node->insert_to_node(k);
-    } else if (k <= node->key[0]) {
-      insert(k, node->first);
-    } else if ((node->size == 1) || ((node->size == 2) && k <= node->key[1])) {
-      insert(k, node->second);
+    if (twoTreeNode->isLeaf()) {
+      twoTreeNode->insertKey(key);
+    } else if (key <= twoTreeNode->keys[0]) {
+      insertIfRootExists(key, twoTreeNode->left);
+    } else if ((twoTreeNode->size == 1) || ((twoTreeNode->size == 2) && key <= twoTreeNode->keys[1])) {
+      insertIfRootExists(key, twoTreeNode->middle);
     } else {
-      insert(k, node->third);
+      insertIfRootExists(key, twoTreeNode->right);
     }
-    root_ = split(node);
+    root_ = splitTwoTreeNode(twoTreeNode);
   }
 
-  TwoThreeNode *TwoThreeTree::split(TwoThreeNode *item) {
-    if (item->size < 3) return item;
+  TwoThreeNode *TwoThreeTree::splitTwoTreeNode(TwoThreeNode *twoTreeNode) {
+    if (twoTreeNode->size < 3) return twoTreeNode;
 
-    TwoThreeNode *x = new TwoThreeNode(item->key[0], item->first, item->second, nullptr, nullptr, item->parent);
-    TwoThreeNode *y = new TwoThreeNode(item->key[2], item->third, item->fourth, nullptr, nullptr, item->parent);
-    if (x->first)  x->first->parent = x;
-    if (x->second) x->second->parent = x;
-    if (y->first)  y->first->parent = y;
-    if (y->second) y->second->parent = y;
+    TwoThreeNode *x = new TwoThreeNode(twoTreeNode->keys[0], twoTreeNode->left, twoTreeNode->middle, nullptr, nullptr,
+                                       twoTreeNode->parent);
+    TwoThreeNode *y = new TwoThreeNode(twoTreeNode->keys[2], twoTreeNode->right, twoTreeNode->additionalElement, nullptr, nullptr,
+                                       twoTreeNode->parent);
+    if (x->left)  x->left->parent = x;
+    if (x->middle) x->middle->parent = x;
+    if (y->left)  y->left->parent = y;
+    if (y->middle) y->middle->parent = y;
 
-    if (item->parent) {
-      item->parent->insert_to_node(item->key[1]);
+    if (twoTreeNode->parent) {
+      twoTreeNode->parent->insertKey(twoTreeNode->keys[1]);
 
-      if (item->parent->first == item) item->parent->first = nullptr;
-      else if (item->parent->second == item) item->parent->second = nullptr;
-      else if (item->parent->third == item) item->parent->third = nullptr;
+      if (twoTreeNode->parent->left == twoTreeNode)
+        twoTreeNode->parent->left = nullptr;
+      else if (twoTreeNode->parent->middle == twoTreeNode)
+        twoTreeNode->parent->middle = nullptr;
+      else if (twoTreeNode->parent->right == twoTreeNode)
+        twoTreeNode->parent->right = nullptr;
 
 
-      if (item->parent->first == nullptr) {
-        item->parent->fourth = item->parent->third;
-        item->parent->third = item->parent->second;
-        item->parent->second = y;
-        item->parent->first = x;
-      } else if (item->parent->second == nullptr) {
-        item->parent->fourth = item->parent->third;
-        item->parent->third = y;
-        item->parent->second = x;
+      if (twoTreeNode->parent->left == nullptr) {
+        twoTreeNode->parent->additionalElement = twoTreeNode->parent->right;
+        twoTreeNode->parent->right = twoTreeNode->parent->middle;
+        twoTreeNode->parent->middle = y;
+        twoTreeNode->parent->left = x;
+      } else if (twoTreeNode->parent->middle == nullptr) {
+        twoTreeNode->parent->additionalElement = twoTreeNode->parent->right;
+        twoTreeNode->parent->right = y;
+        twoTreeNode->parent->middle = x;
       } else {
-        item->parent->fourth = y;
-        item->parent->third = x;
+        twoTreeNode->parent->additionalElement = y;
+        twoTreeNode->parent->right = x;
       }
 
-      TwoThreeNode *tmp = item->parent;
-      delete [] item;
+      TwoThreeNode *tmp = twoTreeNode->parent;
+      delete [] twoTreeNode;
       return tmp;
     } else {
-      x->parent = item;
-      y->parent = item;
-      item->become_node2(item->key[1], x, y);
-      return item;
+      x->parent = twoTreeNode;
+      y->parent = twoTreeNode;
+      twoTreeNode->becomeTwoKeyNode(twoTreeNode->keys[1], x, y);
+      return twoTreeNode;
     }
   }
 
-  TwoThreeNode *TwoThreeTree::Search(int k) {
-    return search(k, root_);
+  TwoThreeNode *TwoThreeTree::Search(int key) {
+    return downstreamSearch(key, root_);
   }
 
-  TwoThreeNode *TwoThreeTree::search(int k, TwoThreeNode *node) {
-    if(node == nullptr) {
+  TwoThreeNode *TwoThreeTree::downstreamSearch(int key, TwoThreeNode *twoTreeNode) {
+    if(twoTreeNode == nullptr) {
       return nullptr;
     }
 
-    if(node->find(k)) {
-      return node;
+    if(twoTreeNode->isContains(key)) {
+      return twoTreeNode;
     }
-    if(k < node->key[0]) {
-      return search(k, node->first);
+    if(key < twoTreeNode->keys[0]) {
+      return downstreamSearch(key, twoTreeNode->left);
     }
-    if( ((node->size == 2) && (k < node->key[1])) || (node->size == 1) ) {
-      return search(k, node->second);
+    if( ((twoTreeNode->size == 2) && (key < twoTreeNode->keys[1])) || (twoTreeNode->size == 1) ) {
+      return downstreamSearch(key, twoTreeNode->middle);
     }
-    if(node->size == 2) {
-      return search(k, node->third);
+    if(twoTreeNode->size == 2) {
+      return downstreamSearch(key, twoTreeNode->right);
     }
     return nullptr;
   }
 
-  void *TwoThreeTree::Remove(int k) {
-    root_ = remove(k, root_);
+  void *TwoThreeTree::Remove(int key) {
+    root_ = downstreamRemove(key, root_);
   }
 
-  TwoThreeNode *TwoThreeTree::remove(int k, TwoThreeNode *node){
-    TwoThreeNode *item = search(k, node);
+  TwoThreeNode *TwoThreeTree::downstreamRemove(int key, TwoThreeNode *twoTreeNode){
+    TwoThreeNode *element = downstreamSearch(key, twoTreeNode);
 
-    if (!item) return node;
+    if (!element) return twoTreeNode;
 
     TwoThreeNode *min = nullptr;
-    if (item->key[0] == k) min = findMin(item->second);
-    else min = findMin(item->third);
+    if (element->keys[0] == key) min = downstreamSearchForMin(element->middle);
+    else min = downstreamSearchForMin(element->right);
 
     if (min) {
-      int &z = (k == item->key[0] ? item->key[0] : item->key[1]);
-      item->swap(z, min->key[0]);
-      item = min;
+      int &z = (key == element->keys[0] ? element->keys[0] : element->keys[1]);
+      element->swapKeys(z, min->keys[0]);
+      element = min;
     }
 
-    item->remove_from_node(k);
-    return fix(item);
+    element->removeByKey(key);
+    return putRight(element);
   }
-  TwoThreeNode *TwoThreeTree::findMin(TwoThreeNode *node) {
-    if (!node) {
-      return node;
+
+  TwoThreeNode *TwoThreeTree::downstreamSearchForMin(TwoThreeNode *twoTreeNode) {
+    if (!twoTreeNode) {
+      return twoTreeNode;
     }
-    if (!(node->first)) {
-      return node;
+    if (!(twoTreeNode->left)) {
+      return twoTreeNode;
     }
     else {
-      return findMin(node->first);
+      return downstreamSearchForMin(twoTreeNode->left);
     }
   }
 
-  TwoThreeNode *TwoThreeTree::fix(TwoThreeNode *leaf) {
+  TwoThreeNode *TwoThreeTree::putRight(TwoThreeNode *leaf) {
     if (leaf->size == 0 && leaf->parent == nullptr) {
       delete leaf;
       return nullptr;
     }
     if (leaf->size != 0) {
-      if (leaf->parent) return fix(leaf->parent);
+      if (leaf->parent) return putRight(leaf->parent);
       else return leaf;
     }
 
     TwoThreeNode *parent = leaf->parent;
-    if (parent->first->size == 2 || parent->second->size == 2 || parent->size == 2) leaf = redistribute(leaf);
-    else if (parent->size == 2 && parent->third->size == 2) leaf = redistribute(leaf);
-    else leaf = merge(leaf);
-    return fix(leaf);
+    if (parent->left->size == 2 || parent->middle->size == 2 || parent->size == 2) leaf = rotate(leaf);
+    else if (parent->size == 2 && parent->right->size == 2) leaf = rotate(leaf);
+    else leaf = mergeNode(leaf);
+    return putRight(leaf);
   }
 
-  TwoThreeNode *TwoThreeTree::redistribute(TwoThreeNode *leaf) {
+  TwoThreeNode *TwoThreeTree::rotate(TwoThreeNode *leaf) {
     TwoThreeNode *parent = leaf->parent;
-    TwoThreeNode *first = parent->first;
-    TwoThreeNode *second = parent->second;
-    TwoThreeNode *third = parent->third;
+    TwoThreeNode *first = parent->left;
+    TwoThreeNode *second = parent->middle;
+    TwoThreeNode *third = parent->right;
 
     if ((parent->size == 2) && (first->size < 2) && (second->size < 2) && (third->size < 2)) {
       if (first == leaf) {
-        parent->first = parent->second;
-        parent->second = parent->third;
-        parent->third = nullptr;
-        parent->first->insert_to_node(parent->key[0]);
-        parent->first->third = parent->first->second;
-        parent->first->second = parent->first->first;
+        parent->left = parent->middle;
+        parent->middle = parent->right;
+        parent->right = nullptr;
+        parent->left->insertKey(parent->keys[0]);
+        parent->left->right = parent->left->middle;
+        parent->left->middle = parent->left->left;
 
-        if (leaf->first != nullptr) parent->first->first = leaf->first;
-        else if (leaf->second != nullptr) parent->first->first = leaf->second;
+        if (leaf->left != nullptr) parent->left->left = leaf->left;
+        else if (leaf->middle != nullptr) parent->left->left = leaf->middle;
 
-        if (parent->first->first != nullptr) parent->first->first->parent = parent->first;
+        if (parent->left->left != nullptr) parent->left->left->parent = parent->left;
 
-        parent->remove_from_node(parent->key[0]);
+        parent->removeByKey(parent->keys[0]);
         delete [] first;
       } else if (second == leaf) {
-        first->insert_to_node(parent->key[0]);
-        parent->remove_from_node(parent->key[0]);
-        if (leaf->first != nullptr) first->third = leaf->first;
-        else if (leaf->second != nullptr) first->third = leaf->second;
+        first->insertKey(parent->keys[0]);
+        parent->removeByKey(parent->keys[0]);
+        if (leaf->left != nullptr) first->right = leaf->left;
+        else if (leaf->middle != nullptr) first->right = leaf->middle;
 
-        if (first->third != nullptr) first->third->parent = first;
+        if (first->right != nullptr) first->right->parent = first;
 
-        parent->second = parent->third;
-        parent->third = nullptr;
+        parent->middle = parent->right;
+        parent->right = nullptr;
 
         delete [] second;
       } else if (third == leaf) {
-        second->insert_to_node(parent->key[1]);
-        parent->third = nullptr;
-        parent->remove_from_node(parent->key[1]);
-        if (leaf->first != nullptr) second->third = leaf->first;
-        else if (leaf->second != nullptr) second->third = leaf->second;
+        second->insertKey(parent->keys[1]);
+        parent->right = nullptr;
+        parent->removeByKey(parent->keys[1]);
+        if (leaf->left != nullptr) second->right = leaf->left;
+        else if (leaf->middle != nullptr) second->right = leaf->middle;
 
-        if (second->third != nullptr)  second->third->parent = second;
+        if (second->right != nullptr)  second->right->parent = second;
 
         delete [] third;
       }
     } else if ((parent->size == 2) && ((first->size == 2) || (second->size == 2) || (third->size == 2))) {
       if (third == leaf) {
-        if (leaf->first != nullptr) {
-          leaf->second = leaf->first;
-          leaf->first = nullptr;
+        if (leaf->left != nullptr) {
+          leaf->middle = leaf->left;
+          leaf->left = nullptr;
         }
 
-        leaf->insert_to_node(parent->key[1]);
+        leaf->insertKey(parent->keys[1]);
         if (second->size == 2) {
-          parent->key[1] = second->key[1];
-          second->remove_from_node(second->key[1]);
-          leaf->first = second->third;
-          second->third = nullptr;
-          if (leaf->first != nullptr) leaf->first->parent = leaf;
+          parent->keys[1] = second->keys[1];
+          second->removeByKey(second->keys[1]);
+          leaf->left = second->right;
+          second->right = nullptr;
+          if (leaf->left != nullptr) leaf->left->parent = leaf;
         } else if (first->size == 2) {
-          parent->key[1] = second->key[0];
-          leaf->first = second->second;
-          second->second = second->first;
-          if (leaf->first != nullptr) leaf->first->parent = leaf;
+          parent->keys[1] = second->keys[0];
+          leaf->left = second->middle;
+          second->middle = second->left;
+          if (leaf->left != nullptr) leaf->left->parent = leaf;
 
-          second->key[0] = parent->key[0];
-          parent->key[0] = first->key[1];
-          first->remove_from_node(first->key[1]);
-          second->first = first->third;
-          if (second->first != nullptr) second->first->parent = second;
-          first->third = nullptr;
+          second->keys[0] = parent->keys[0];
+          parent->keys[0] = first->keys[1];
+          first->removeByKey(first->keys[1]);
+          second->left = first->right;
+          if (second->left != nullptr) second->left->parent = second;
+          first->right = nullptr;
         }
       } else if (second == leaf) {
         if (third->size == 2) {
-          if (leaf->first == nullptr) {
-            leaf->first = leaf->second;
-            leaf->second = nullptr;
+          if (leaf->left == nullptr) {
+            leaf->left = leaf->middle;
+            leaf->middle = nullptr;
           }
-          second->insert_to_node(parent->key[1]);
-          parent->key[1] = third->key[0];
-          third->remove_from_node(third->key[0]);
-          second->second = third->first;
-          if (second->second != nullptr) second->second->parent = second;
-          third->first = third->second;
-          third->second = third->third;
-          third->third = nullptr;
+          second->insertKey(parent->keys[1]);
+          parent->keys[1] = third->keys[0];
+          third->removeByKey(third->keys[0]);
+          second->middle = third->left;
+          if (second->middle != nullptr) second->middle->parent = second;
+          third->left = third->middle;
+          third->middle = third->right;
+          third->right = nullptr;
         } else if (first->size == 2) {
-          if (leaf->second == nullptr) {
-            leaf->second = leaf->first;
-            leaf->first = nullptr;
+          if (leaf->middle == nullptr) {
+            leaf->middle = leaf->left;
+            leaf->left = nullptr;
           }
-          second->insert_to_node(parent->key[0]);
-          parent->key[0] = first->key[1];
-          first->remove_from_node(first->key[1]);
-          second->first = first->third;
-          if (second->first != nullptr) second->first->parent = second;
-          first->third = nullptr;
+          second->insertKey(parent->keys[0]);
+          parent->keys[0] = first->keys[1];
+          first->removeByKey(first->keys[1]);
+          second->left = first->right;
+          if (second->left != nullptr) second->left->parent = second;
+          first->right = nullptr;
         }
       } else if (first == leaf) {
-        if (leaf->first == nullptr) {
-          leaf->first = leaf->second;
-          leaf->second = nullptr;
+        if (leaf->left == nullptr) {
+          leaf->left = leaf->middle;
+          leaf->middle = nullptr;
         }
-        first->insert_to_node(parent->key[0]);
+        first->insertKey(parent->keys[0]);
         if (second->size == 2) {
-          parent->key[0] = second->key[0];
-          second->remove_from_node(second->key[0]);
-          first->second = second->first;
-          if (first->second != nullptr) first->second->parent = first;
-          second->first = second->second;
-          second->second = second->third;
-          second->third = nullptr;
+          parent->keys[0] = second->keys[0];
+          second->removeByKey(second->keys[0]);
+          first->middle = second->left;
+          if (first->middle != nullptr) first->middle->parent = first;
+          second->left = second->middle;
+          second->middle = second->right;
+          second->right = nullptr;
         } else if (third->size == 2) {
-          parent->key[0] = second->key[0];
-          second->key[0] = parent->key[1];
-          parent->key[1] = third->key[0];
-          third->remove_from_node(third->key[0]);
-          first->second = second->first;
-          if (first->second != nullptr) first->second->parent = first;
-          second->first = second->second;
-          second->second = third->first;
-          if (second->second != nullptr) second->second->parent = second;
-          third->first = third->second;
-          third->second = third->third;
-          third->third = nullptr;
+          parent->keys[0] = second->keys[0];
+          second->keys[0] = parent->keys[1];
+          parent->keys[1] = third->keys[0];
+          third->removeByKey(third->keys[0]);
+          first->middle = second->left;
+          if (first->middle != nullptr) first->middle->parent = first;
+          second->left = second->middle;
+          second->middle = third->left;
+          if (second->middle != nullptr) second->middle->parent = second;
+          third->left = third->middle;
+          third->middle = third->right;
+          third->right = nullptr;
         }
       }
     } else if (parent->size == 1) {
-      leaf->insert_to_node(parent->key[0]);
+      leaf->insertKey(parent->keys[0]);
 
       if (first == leaf && second->size == 2) {
-        parent->key[0] = second->key[0];
-        second->remove_from_node(second->key[0]);
+        parent->keys[0] = second->keys[0];
+        second->removeByKey(second->keys[0]);
 
-        if (leaf->first == nullptr) leaf->first = leaf->second;
+        if (leaf->left == nullptr) leaf->left = leaf->middle;
 
-        leaf->second = second->first;
-        second->first = second->second;
-        second->second = second->third;
-        second->third = nullptr;
-        if (leaf->second != nullptr) leaf->second->parent = leaf;
+        leaf->middle = second->left;
+        second->left = second->middle;
+        second->middle = second->right;
+        second->right = nullptr;
+        if (leaf->middle != nullptr) leaf->middle->parent = leaf;
       } else if (second == leaf && first->size == 2) {
-        parent->key[0] = first->key[1];
-        first->remove_from_node(first->key[1]);
+        parent->keys[0] = first->keys[1];
+        first->removeByKey(first->keys[1]);
 
-        if (leaf->second == nullptr) leaf->second = leaf->first;
+        if (leaf->middle == nullptr) leaf->middle = leaf->left;
 
-        leaf->first = first->third;
-        first->third = nullptr;
-        if (leaf->first != nullptr) leaf->first->parent = leaf;
+        leaf->left = first->right;
+        first->right = nullptr;
+        if (leaf->left != nullptr) leaf->left->parent = leaf;
       }
     }
     return parent;
   }
 
-  TwoThreeNode *TwoThreeTree::merge(TwoThreeNode *leaf) {
+  TwoThreeNode *TwoThreeTree::mergeNode(TwoThreeNode *leaf) {
     TwoThreeNode *parent = leaf->parent;
 
-    if (parent->first == leaf) {
-      parent->second->insert_to_node(parent->key[0]);
-      parent->second->third = parent->second->second;
-      parent->second->second = parent->second->first;
+    if (parent->left == leaf) {
+      parent->middle->insertKey(parent->keys[0]);
+      parent->middle->right = parent->middle->middle;
+      parent->middle->middle = parent->middle->left;
 
-      if (leaf->first != nullptr) parent->second->first = leaf->first;
-      else if (leaf->second != nullptr) parent->second->first = leaf->second;
+      if (leaf->left != nullptr) parent->middle->left = leaf->left;
+      else if (leaf->middle != nullptr) parent->middle->left = leaf->middle;
 
-      if (parent->second->first != nullptr) parent->second->first->parent = parent->second;
+      if (parent->middle->left != nullptr) parent->middle->left->parent = parent->middle;
 
-      parent->remove_from_node(parent->key[0]);
-      delete parent->first;
-      parent->first = nullptr;
-    } else if (parent->second == leaf) {
-      parent->first->insert_to_node(parent->key[0]);
+      parent->removeByKey(parent->keys[0]);
+      delete parent->left;
+      parent->left = nullptr;
+    } else if (parent->middle == leaf) {
+      parent->left->insertKey(parent->keys[0]);
 
-      if (leaf->first != nullptr) parent->first->third = leaf->first;
-      else if (leaf->second != nullptr) parent->first->third = leaf->second;
+      if (leaf->left != nullptr) parent->left->right = leaf->left;
+      else if (leaf->middle != nullptr) parent->left->right = leaf->middle;
 
-      if (parent->first->third != nullptr) parent->first->third->parent = parent->first;
+      if (parent->left->right != nullptr) parent->left->right->parent = parent->left;
 
-      parent->remove_from_node(parent->key[0]);
-      delete [] parent->second;
-      parent->second = nullptr;
+      parent->removeByKey(parent->keys[0]);
+      delete [] parent->middle;
+      parent->middle = nullptr;
     }
 
     if (parent->parent == nullptr) {
       TwoThreeNode *tmp = nullptr;
-      if (parent->first != nullptr) tmp = parent->first;
-      else tmp = parent->second;
+      if (parent->left != nullptr) tmp = parent->left;
+      else tmp = parent->middle;
       tmp->parent = nullptr;
       delete [] parent;
       return tmp;
@@ -357,22 +361,22 @@ namespace itis {
     return parent;
   }
 
-  TwoThreeNode *TwoThreeTree::root() {
+  TwoThreeNode *TwoThreeTree::getRoot() {
     return root_;
   }
 
-  int TwoThreeTree::Height() {
-    return height(root_);
+  int TwoThreeTree::getHeight() {
+    return calculateHeight(root_);
   }
 
-  int TwoThreeTree::height(TwoThreeNode *node) {
-    if (node == nullptr) {
+  int TwoThreeTree::calculateHeight(TwoThreeNode *twoTreeNode) {
+    if (twoTreeNode == nullptr) {
       return 0;
     }
 
-    const int first_height = height(node->first);
+    const int height = calculateHeight(twoTreeNode->left);
 
-    return first_height + 1;
+    return height + 1;
   }
 
   void TwoThreeTree::Traverse(const TraversalAlgorithm &algorithm) const {
